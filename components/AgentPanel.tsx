@@ -47,6 +47,7 @@ export default function AgentPanel({ title, systemPrompt, suggestions, placehold
   const [listening, setListening] = useState(false);
   const [speak, setSpeak] = useState(speakReplies);
   const contentsRef = useRef<Content[]>([]);
+  const modelRef = useRef<string | undefined>(undefined);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recRef = useRef<SpeechRecognitionLike | null>(null);
 
@@ -82,14 +83,17 @@ export default function AgentPanel({ title, systemPrompt, suggestions, placehold
         for (let turn = 0; turn < 10; turn++) {
           const res = await fetch("/api/agent", {
             method: "POST",
+            signal: AbortSignal.timeout(110000),
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               contents: contentsRef.current,
               tools: toolDeclarations(),
               system: systemPrompt,
+              model: modelRef.current,
             }),
           });
-          const data = (await res.json()) as { content?: Content; error?: string };
+          const data = (await res.json()) as { content?: Content; error?: string; model?: string };
+          if (data.model) modelRef.current = data.model;
           if (!res.ok || !data.content) {
             setMessages((m) => [...m, { kind: "agent", text: `⚠️ ${data.error ?? "Agent error"}` }]);
             break;
