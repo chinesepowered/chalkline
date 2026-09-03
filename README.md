@@ -4,7 +4,7 @@
 
 Describe a system in plain language and an agent draws it as an architecture diagram. Drag boxes, rename them, draw your own arrows, delete what you don't like, and the agent keeps up, because it reads the live canvas through WebMCP before every change.
 
-Built for [The WebMCP Challenge](https://webmcp.devpost.com/).
+Built for [The WebMCP Challenge](https://webmcp.devpost.com/). **Live: https://chalkline-steel.vercel.app**
 
 ## Why WebMCP
 
